@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Content">
+        <menu>
+            <item
+                android:id="@+id/nav_timetale"
+                android:icon="@drawable/ic_access_time_black_24dp"
+                android:title="Class Timetable" />
+            <item
+                android:id="@+id/nav_assignment"
+                android:icon="@drawable/ic_assignment_black_24dp"
+                android:title="Assignments" />
+            <item
+                android:id="@+id/nav_quiz"
+                android:icon="@drawable/ic_track_changes_black_24dp"
+                android:title="Quiz" />
+            <item
+                android:id="@+id/nav_subject"
+                android:icon="@drawable/ic_subjects"
+                android:title="Subject" />
+            <item
+                android:id="@+id/nav_custom_list"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Custom List" />
+            <item
+                android:id="@+id/nav_chat_group"
+                android:icon="@drawable/ic_group_black_24dp"
+                android:title="Chat Group" />
+
+        </menu>
+
+    </item>
+
+    <item android:title="Setting">
+        <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="Setting" />
+            <item
+                android:id="@+id/nav_Help"
+                android:icon="@drawable/ic_help_black_24dp"
+                android:title="Help and feedback" />
+        </menu>
+    </item>
+    <item android:title="AboutUs">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info_black_24dp"
+                android:title="About" />
+        </menu>
+
+    </item>
+</menu>
