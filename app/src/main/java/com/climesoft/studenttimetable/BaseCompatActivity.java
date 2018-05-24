@@ -13,13 +13,16 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.climesoft.studenttimetable.util.ActivityUtil;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 public abstract class BaseCompatActivity extends AppCompatActivity{
 
     protected DrawerLayout mDrawerLayout;
     protected NavigationView mNavigationView;
     protected FrameLayout frameLayout;
-
+    protected FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -27,6 +30,14 @@ public abstract class BaseCompatActivity extends AppCompatActivity{
         frameLayout = findViewById(R.id.content_frame);
         initToolbar();
         initNavigationDrawer();
+        setupFirestoreSetting();
+    }
+
+    private void setupFirestoreSetting() {
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
     }
 
     protected void initToolbar(){
