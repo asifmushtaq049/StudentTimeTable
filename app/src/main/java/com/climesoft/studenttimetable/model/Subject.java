@@ -69,4 +69,10 @@ public class Subject implements Parcelable {
             return new Subject[size];
         }
     };
+
+
+    @Override
+    public String toString(){
+        return this.name.toUpperCase() + " " + this.code.toUpperCase();
+    }
 }

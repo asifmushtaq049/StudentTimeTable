@@ -7,25 +7,26 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.climesoft.studenttimetable.util.ActivityUtil;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
-public abstract class BaseCompatActivity extends AppCompatActivity{
+public abstract class BaseCompatActivity extends BaseActivity{
 
     protected DrawerLayout mDrawerLayout;
     protected NavigationView mNavigationView;
     protected FrameLayout frameLayout;
-    protected FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+        if(user == null){
+            ActivityUtil.moveToActivity(this, LoginActivity.class);
+            this.finish();
+        }
         setContentView(R.layout.activity_base);
         frameLayout = findViewById(R.id.content_frame);
         initToolbar();
@@ -62,7 +63,7 @@ public abstract class BaseCompatActivity extends AppCompatActivity{
     private boolean manageNavigation(int itemId) {
         switch(itemId){
             case R.id.nav_timetale:
-                ActivityUtil.moveToActivity(BaseCompatActivity.this, TimetableActivity.class);
+                ActivityUtil.moveToActivity(BaseCompatActivity.this, TimeTableActivity.class);
                 return true;
             case R.id.nav_subject:
                 ActivityUtil.moveToActivity(BaseCompatActivity.this, SubjectActivity.class);
@@ -73,6 +74,10 @@ public abstract class BaseCompatActivity extends AppCompatActivity{
             case R.id.nav_quiz:
                 ActivityUtil.moveToActivity(BaseCompatActivity.this, QuizActivity.class);
                 return true;
+            case R.id.nav_Logout:
+                logout();
+                return true;
+
         }
         return false;
     }

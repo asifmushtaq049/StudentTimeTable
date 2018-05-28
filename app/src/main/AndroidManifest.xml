@@ -9,20 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TimetableActivity"
-            android:theme="@style/AppTheme">
+        <activity android:name=".LoginActivity"
+            android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SubjectActivity"
-            android:label="@string/title_activity_subject" />
-        <activity android:name=".AssignmentActivity" />
-        <activity android:name=".QuizActivity" />
-        <activity android:name=".SubjectAddActivity"></activity>
+        <activity android:name=".TimeTableActivity"
+            android:label="TimeTable" />
+        <activity android:name=".SubjectActivity"
+            android:label="Subject"/>
+        <activity android:name=".AssignmentActivity"
+            android:label="Assignment"/>
+        <activity android:name=".QuizActivity"
+            android:label="Quiz"/>
+        <activity android:name=".QuizAddActivity"
+            android:label="Add Quiz"/>
+        <activity android:name=".SubjectAddActivity"
+            android:label="Add Subject"/>
+        <activity android:name=".AssignmentAddActivity"
+            android:label="Add Assignment"/>
+        <activity android:name=".TimeTableDetailActivity"
+            android:label="TimeTable Detail"/>
+        <activity android:name=".TimeTableAddActivity"
+            android:label="Add TimeTable"/>
+        <activity android:name=".RegistrationActivity"
+            android:label="Register"/>
     </application>
 
 </manifest>

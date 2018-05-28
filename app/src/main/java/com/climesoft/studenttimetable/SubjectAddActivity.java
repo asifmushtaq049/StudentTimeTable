@@ -48,7 +48,6 @@ public class SubjectAddActivity extends BaseBackActivity {
         }
     }
 
-
     public void addSubject(final View view){
         view.setEnabled(false);
 
