@@ -20,6 +20,10 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(user!=null){
+            ActivityUtil.moveToActivity(LoginActivity.this, TimeTableActivity.class);
+            LoginActivity.this.finish();
+        }
         setContentView(R.layout.activity_login);
         txtEmail = findViewById(R.id.textInputEmail);
         txtPass = findViewById(R.id.textInputPassword);

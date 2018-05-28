@@ -31,14 +31,14 @@ public abstract class BaseCompatActivity extends BaseActivity{
         frameLayout = findViewById(R.id.content_frame);
         initToolbar();
         initNavigationDrawer();
-        setupFirestoreSetting();
+//        setupFirestoreSetting();
     }
 
     private void setupFirestoreSetting() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        db.setFirestoreSettings(settings);
+        rootdb.setFirestoreSettings(settings);
     }
 
     protected void initToolbar(){

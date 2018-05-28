@@ -23,14 +23,14 @@ abstract public class BaseBackActivity extends BaseActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        setupFirestoreSetting();
+//        setupFirestoreSetting();
     }
 
     private void setupFirestoreSetting() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
-        db.setFirestoreSettings(settings);
+        rootdb.setFirestoreSettings(settings);
     }
 
     @Override

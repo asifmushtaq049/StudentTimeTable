@@ -5,4 +5,5 @@ public class KeyMeta {
     public static final String ASSIGNMENT = "ASSIGNMENT";
     public static final String QUIZ = "QUIZ";
     public static final String DAY = "DAY";
+    public static final String TIMETABLE = "TIMETABLE";
 }

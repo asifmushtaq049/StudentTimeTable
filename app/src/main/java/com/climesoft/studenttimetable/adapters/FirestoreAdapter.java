@@ -3,7 +3,11 @@ package com.climesoft.studenttimetable.adapters;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.climesoft.studenttimetable.meta.DBMeta;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,12 +33,18 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     private Query mQuery;
     private ListenerRegistration mRegistration;
-    protected FirebaseFirestore db = FirebaseFirestore.getInstance();
+    protected FirebaseFirestore rootDb = FirebaseFirestore.getInstance();
+    protected FirebaseAuth mAuth;
+    protected FirebaseUser user;
+    protected DocumentReference db;
 
     private ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
 
     public FirestoreAdapter(Query query) {
         mQuery = query;
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        db = rootDb.collection(DBMeta.COLLECTION_USER).document(user.getUid());
     }
 
     @Override

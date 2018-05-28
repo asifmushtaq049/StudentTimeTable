@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -13,13 +14,17 @@ import android.widget.TimePicker;
 import com.climesoft.studenttimetable.meta.DBMeta;
 import com.climesoft.studenttimetable.meta.KeyMeta;
 import com.climesoft.studenttimetable.model.Subject;
+import com.climesoft.studenttimetable.model.TimeTable;
 import com.climesoft.studenttimetable.util.ActivityUtil;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TimeTableAddActivity extends BaseBackActivity {
 
@@ -28,6 +33,9 @@ public class TimeTableAddActivity extends BaseBackActivity {
     private ArrayList<Subject> subjects = new ArrayList<>();
     private Spinner spinnerSubjects;
     private EditText editTextTime;
+    private boolean isUpdate = false;
+    private TimeTable timeTable;
+    private Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +44,17 @@ public class TimeTableAddActivity extends BaseBackActivity {
         spinnerSubjects = findViewById(R.id.spinnerSubjects);
         editTextTime = findViewById(R.id.editTextTime);
         txtDay = findViewById(R.id.txtDay);
+        btnAdd = findViewById(R.id.btnAdd);
         if(getIntent()!=null){
-            day = getIntent().getStringExtra(KeyMeta.DAY);
+            if(getIntent().hasExtra(KeyMeta.DAY)){
+                day = getIntent().getStringExtra(KeyMeta.DAY);
+            }
+            if(getIntent().hasExtra(KeyMeta.TIMETABLE)){
+                timeTable = getIntent().getParcelableExtra(KeyMeta.TIMETABLE);
+                isUpdate = true;
+                editTextTime.setText(timeTable.getTime());
+                btnAdd.setText("UPDATE");
+            }
         }
         txtDay.setText(day);
         loadSubjects();
@@ -82,7 +99,70 @@ public class TimeTableAddActivity extends BaseBackActivity {
         timePickerDialog.show();
     }
 
-    public void addTimeTable(View view) {
+    public void addTimeTable(final View view) {
+        view.setEnabled(false);
+        final Subject subject = (Subject) spinnerSubjects.getSelectedItem();
+        final DocumentReference subRef = db.collection(DBMeta.COLLECTION_SUBJECT).document(subject.getId());
+        final String time = editTextTime.getText().toString();
+        if(time.isEmpty()){
+            ActivityUtil.showMessage(this, "Fill all fields!");
+            view.setEnabled(true);
+            return;
+        }
+        db.collection(DBMeta.COLLECTION_TIMETABLE)
+                .whereEqualTo(DBMeta.DOCUMENT_TIMETABLE_SUBJECT, subRef)
+                .whereEqualTo(DBMeta.DOCUMENT_TIMETABLE_DAY, day)
+                .whereEqualTo(DBMeta.DOCUMENT_TIMETABLE_TIME, time)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        view.setEnabled(true);
+                        if(queryDocumentSnapshots.isEmpty()){
+                            if(isUpdate){
+                                updateTimeTable(subRef, time, view);
+                            }else{
+                                addNewTimeTable(subRef, time, view);
+                            }
+                        }else{
+                            ActivityUtil.showMessage(TimeTableAddActivity.this, "Already Exists!");
+                        }
+                    }
+                });
+    }
 
+    private void addNewTimeTable(DocumentReference subRef, String time, View view){
+        view.setEnabled(false);
+        final Map<String, Object> data = new HashMap<>();
+        data.put(DBMeta.DOCUMENT_TIMETABLE_DAY, day);
+        data.put(DBMeta.DOCUMENT_TIMETABLE_SUBJECT, subRef);
+        data.put(DBMeta.DOCUMENT_TIMETABLE_TIME, time);
+        db.collection(DBMeta.COLLECTION_TIMETABLE)
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Added!");
+                        TimeTableAddActivity.this.finish();
+                    }
+                });
+    }
+
+    private void updateTimeTable(DocumentReference subRef, String time, View view){
+        view.setEnabled(false);
+        final Map<String, Object> data = new HashMap<>();
+        data.put(DBMeta.DOCUMENT_TIMETABLE_DAY, day);
+        data.put(DBMeta.DOCUMENT_TIMETABLE_SUBJECT, subRef);
+        data.put(DBMeta.DOCUMENT_TIMETABLE_TIME, time);
+        db.collection(DBMeta.COLLECTION_TIMETABLE)
+                .document(timeTable.getId())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Updated!");
+                        TimeTableAddActivity.this.finish();
+                    }
+                });
     }
 }
