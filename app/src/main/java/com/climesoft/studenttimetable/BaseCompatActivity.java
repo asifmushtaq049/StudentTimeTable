@@ -74,6 +74,9 @@ public abstract class BaseCompatActivity extends BaseActivity{
             case R.id.nav_quiz:
                 ActivityUtil.moveToActivity(BaseCompatActivity.this, QuizActivity.class);
                 return true;
+            case R.id.nav_chat_group:
+                ActivityUtil.moveToActivity(BaseCompatActivity.this, GroupActivity.class);
+                return true;
             case R.id.nav_Logout:
                 logout();
                 return true;

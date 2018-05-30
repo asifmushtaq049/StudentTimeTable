@@ -1,10 +1,16 @@
 package com.climesoft.studenttimetable;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.climesoft.studenttimetable.meta.DBMeta;
 import com.climesoft.studenttimetable.util.ActivityUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,9 +27,13 @@ abstract public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        db = rootdb.collection(DBMeta.COLLECTION_USER).document(user.getUid());
+        if(checkPlayServices()) {
+            mAuth = FirebaseAuth.getInstance();
+            user = mAuth.getCurrentUser();
+            if (user != null) {
+                db = rootdb.collection(DBMeta.COLLECTION_USER).document(user.getUid());
+            }
+        }
 //        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
 //                .setPersistenceEnabled(true)
 //                .build();
@@ -34,5 +44,19 @@ abstract public class BaseActivity extends AppCompatActivity {
             mAuth.signOut();
             ActivityUtil.moveToActivity(this, LoginActivity.class);
         }
+    }
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, 9000)
+                        .show();
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }
