@@ -4,12 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.climesoft.studenttimetable.broadcast.NotificationReceiver;
+import com.climesoft.studenttimetable.meta.KeyMeta;
 
 import java.util.Calendar;
 
@@ -61,6 +63,8 @@ public class ActivityUtil {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent _myIntent = new Intent(context, NotificationReceiver.class);
         _myIntent.putExtras(bundle);
+        calendar.add(Calendar.HOUR_OF_DAY, -Integer.parseInt(timeBefore(context)[0]));
+        calendar.add(Calendar.MINUTE, -Integer.parseInt(timeBefore(context)[1]));
         PendingIntent _myPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), hashCode, _myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),_myPendingIntent);
 
@@ -69,9 +73,19 @@ public class ActivityUtil {
     public static void setTimeTableAlarm(Context context, Calendar calendar, Bundle bundle, int hashCode){
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent _myIntent = new Intent(context, NotificationReceiver.class);
+        calendar.add(Calendar.HOUR_OF_DAY, -Integer.parseInt(timeBefore(context)[0]));
+        calendar.add(Calendar.MINUTE, -Integer.parseInt(timeBefore(context)[1]));
         _myIntent.putExtras(bundle);
         PendingIntent _myPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), hashCode, _myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24 * 60 * 60 * 1000, _myPendingIntent);
         Log.d("ALARMTIME:", String.valueOf(calendar.getTimeInMillis()));
+    }
+
+    public static String[] timeBefore(Context context){
+        SharedPreferences prefs;
+        prefs = context.getApplicationContext().getSharedPreferences(KeyMeta.PREF_SETTING, Context.MODE_PRIVATE);
+        String time = prefs.getString(KeyMeta.PREF_SETTING_TIME, "0:15");
+        String[] comTime = time.split(":");
+        return comTime;
     }
 }

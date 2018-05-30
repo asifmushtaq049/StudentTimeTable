@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.climesoft.studenttimetable.util.ActivityUtil;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -51,6 +52,11 @@ public abstract class BaseCompatActivity extends BaseActivity{
     protected void initNavigationDrawer(){
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
+        View headerView = mNavigationView.getHeaderView(0);
+        TextView navUserName = headerView.findViewById(R.id.txtHeaderName);
+        TextView navUserEmail = headerView.findViewById(R.id.txtHeaderEmail);
+        navUserName.setText(user.getDisplayName());
+        navUserEmail.setText(user.getEmail());
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

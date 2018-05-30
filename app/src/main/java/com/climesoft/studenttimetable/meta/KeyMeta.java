@@ -12,4 +12,6 @@ public class KeyMeta {
     public static final String QUIZ_ASS_SUBJECT = "QUIZ_SUBJECT";
     public static final String TYPE = "TYPE";
     public static final String HASH_CODE = "HASH_CODE";
+    public static final String PREF_SETTING = "com.climesoft.timetable.setting";
+    public static final String PREF_SETTING_TIME = "alert_before_time";
 }

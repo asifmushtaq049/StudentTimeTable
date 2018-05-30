@@ -9,7 +9,9 @@ import com.climesoft.studenttimetable.meta.DBMeta;
 import com.climesoft.studenttimetable.meta.KeyMeta;
 import com.climesoft.studenttimetable.util.ActivityUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,13 +26,24 @@ public class TimeTableActivity extends BaseCompatActivity {
         if(getIntent() != null){
             if(getIntent().hasExtra(KeyMeta.USER_NAME)){
                 name = getIntent().getStringExtra(KeyMeta.USER_NAME);
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build();
-                user.updateProfile(profileUpdates);
+                attachName(name);
                 updateUserData();
+            }else{
+                db.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        attachName(documentSnapshot.getString(DBMeta.DOCUMENT_USER_NAME));
+                    }
+                });
             }
         }
+    }
+
+    private void attachName(String name) {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+        user.updateProfile(profileUpdates);
     }
 
     private void updateUserData() {
