@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -111,8 +112,8 @@ public class QuizAddActivity extends BaseBackActivity {
                 });
     }
 
-    private void addNewQuiz(String topic, String date, String time,
-                                  DocumentReference subRef, final View view) {
+    private void addNewQuiz(String topic, final String date, final String time,
+                            DocumentReference subRef, final View view) {
         view.setEnabled(false);
         final Map<String, Object> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_QUIZ_TOPIC, topic);
@@ -126,19 +127,42 @@ public class QuizAddActivity extends BaseBackActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Added!");
                         view.setEnabled(true);
+                        createNotification(date, time, documentReference.getId().hashCode());
                         QuizAddActivity.this.finish();
                     }
                 });
     }
 
-    private void updateQuiz(String topic, String date, String time,
-                                  DocumentReference subRef, final View view) {
+    private void createNotification(String date, String time, int hashCode) {
+        String[] completeDate = date.split("-");
+        String[] completeTime = time.split(":");
+
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.MONTH,Integer.parseInt(completeDate[1]) -1);
+        cal.set(Calendar.YEAR,Integer.parseInt(completeDate[2]));
+        cal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(completeDate[0]));
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(completeTime[0]));
+        cal.set(Calendar.MINUTE,Integer.parseInt(completeTime[1]));
+        cal.set(Calendar.SECOND,0);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(KeyMeta.TYPE, KeyMeta.QUIZ);
+        bundle.putInt(KeyMeta.HASH_CODE, hashCode);
+        bundle.putString(KeyMeta.QUIZ_ASS_TOPIC, txtInputTopic.getEditText().getText().toString());
+        bundle.putString(KeyMeta.QUIZ_ASS_SUBJECT, ((Subject)spinnerSubjects.getSelectedItem()).getName() + "-" + ((Subject)spinnerSubjects.getSelectedItem()).getCode());
+        ActivityUtil.setAlarm(this, cal, bundle, hashCode);
+    }
+
+    private void updateQuiz(String topic, final String date, final String time,
+                            DocumentReference subRef, final View view) {
         view.setEnabled(false);
         final Map<String, Object> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_QUIZ_TOPIC, topic);
         data.put(DBMeta.DOCUMENT_QUIZ_DATE, date);
         data.put(DBMeta.DOCUMENT_QUIZ_TIME, time);
         data.put(DBMeta.DOCUMENT_QUIZ_SUBJECT, subRef);
+
         db.collection(DBMeta.COLLECTION_QUIZ).document(quiz.getId())
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -146,6 +170,7 @@ public class QuizAddActivity extends BaseBackActivity {
                     public void onSuccess(Void aVoid) {
                         ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Updated!");
                         view.setEnabled(true);
+                        createNotification(date, time, quiz.getId().hashCode());
                         QuizAddActivity.this.finish();
                     }
                 });

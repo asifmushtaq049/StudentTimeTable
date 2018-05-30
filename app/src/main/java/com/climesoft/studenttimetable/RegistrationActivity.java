@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.climesoft.studenttimetable.meta.KeyMeta;
 import com.climesoft.studenttimetable.util.ActivityUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,6 +20,7 @@ public class RegistrationActivity extends BaseActivity {
     private static final String TAG = "Registration";
     private TextInputLayout txtEmail;
     private TextInputLayout txtPass;
+    private TextInputLayout txtName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class RegistrationActivity extends BaseActivity {
         setContentView(R.layout.activity_registration);
         txtEmail = findViewById(R.id.textInputEmail);
         txtPass = findViewById(R.id.textInputPassword);
+        txtName = findViewById(R.id.textInputName);
     }
 
     public void loginActivity(View view) {
@@ -35,7 +38,8 @@ public class RegistrationActivity extends BaseActivity {
     public void register(final View view){
         String email = txtEmail.getEditText().getText().toString();
         String password = txtPass.getEditText().getText().toString();
-        if(email.isEmpty() || password.isEmpty()){
+        final String name = txtName.getEditText().getText().toString();
+        if(email.isEmpty() || password.isEmpty() || name.isEmpty()){
             ActivityUtil.showMessage(this, "Fill all fields!");
             return;
         }
@@ -47,7 +51,9 @@ public class RegistrationActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            ActivityUtil.moveToActivity(RegistrationActivity.this, TimeTableActivity.class);
+                            final Bundle bundle = new Bundle();
+                            bundle.putString(KeyMeta.USER_NAME, name);
+                            ActivityUtil.moveToActivity(RegistrationActivity.this, TimeTableActivity.class, bundle);
                             RegistrationActivity.this.finish();
                         } else {
                             // If sign in fails, display a message to the user.

@@ -30,7 +30,9 @@ public class QuizActivity extends BaseCompatActivity{
         floatingButtonAction(QuizAddActivity.class);
 
         recyclerView = findViewById(R.id.recyclerView);
-        query = db.collection(DBMeta.COLLECTION_QUIZ);
+        query = db.collection(DBMeta.COLLECTION_QUIZ)
+                .orderBy(DBMeta.DOCUMENT_QUIZ_DATE)
+                .orderBy(DBMeta.DOCUMENT_QUIZ_TIME);
 
         mAdapter = new QuizAdapter(query);
         recyclerView.setAdapter(mAdapter);

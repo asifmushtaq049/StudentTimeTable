@@ -131,7 +131,7 @@ public class TimeTableAddActivity extends BaseBackActivity {
                 });
     }
 
-    private void addNewTimeTable(DocumentReference subRef, String time, View view){
+    private void addNewTimeTable(DocumentReference subRef, final String time, View view){
         view.setEnabled(false);
         final Map<String, Object> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_TIMETABLE_DAY, day);
@@ -143,12 +143,13 @@ public class TimeTableAddActivity extends BaseBackActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Added!");
+                        createNotification(time, documentReference.getId().hashCode());
                         TimeTableAddActivity.this.finish();
                     }
                 });
     }
 
-    private void updateTimeTable(DocumentReference subRef, String time, View view){
+    private void updateTimeTable(DocumentReference subRef, final String time, View view){
         view.setEnabled(false);
         final Map<String, Object> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_TIMETABLE_DAY, day);
@@ -161,8 +162,25 @@ public class TimeTableAddActivity extends BaseBackActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Updated!");
+                        createNotification(time, timeTable.getId().hashCode());
                         TimeTableAddActivity.this.finish();
                     }
                 });
+    }
+
+    private void createNotification(String time, int hashCode) {
+        String[] completeTime = time.split(":");
+
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK,ActivityUtil.dayToInt(day));
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(completeTime[0]));
+        cal.set(Calendar.MINUTE,Integer.parseInt(completeTime[1]));
+        cal.set(Calendar.SECOND,0);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(KeyMeta.TYPE, KeyMeta.TIMETABLE);
+        bundle.putInt(KeyMeta.HASH_CODE, hashCode);
+        bundle.putString(KeyMeta.SUBJECT, ((Subject)spinnerSubjects.getSelectedItem()).getName() + "-" + ((Subject)spinnerSubjects.getSelectedItem()).getCode());
+        ActivityUtil.setTimeTableAlarm(this, cal, bundle, hashCode);
     }
 }

@@ -28,7 +28,9 @@ public class AssignmentActivity extends BaseCompatActivity{
         floatingButtonAction(AssignmentAddActivity.class);
 
         recyclerView = findViewById(R.id.recyclerView);
-        query = db.collection(DBMeta.COLLECTION_ASSIGNMENT);
+        query = db.collection(DBMeta.COLLECTION_ASSIGNMENT)
+                    .orderBy(DBMeta.DOCUMENT_ASSIGNMENT_DATE)
+                    .orderBy(DBMeta.DOCUMENT_ASSIGNMENT_TIME);
 
         mAdapter = new AssignmentAdapter(query);
         recyclerView.setAdapter(mAdapter);

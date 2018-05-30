@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.climesoft.studenttimetable">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -51,13 +55,17 @@
             android:label="Groups" />
         <activity
             android:name=".GroupAddActivity"
-            android:label="Add Group"/>
+            android:label="Add Group" />
         <activity
             android:name=".GroupChatActivity"
-            android:label="Group Chat"/>
+            android:label="Group Chat" />
         <activity
             android:name=".GroupChatSendNotification"
             android:label="Send Notification to Group" />
+        <activity
+            android:name=".SettingActivity"
+            android:label="Setting" />
+        <receiver android:name=".broadcast.NotificationReceiver"/>
     </application>
 
 </manifest>

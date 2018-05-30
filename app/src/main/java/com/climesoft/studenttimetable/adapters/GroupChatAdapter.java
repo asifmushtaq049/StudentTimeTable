@@ -41,7 +41,7 @@ public class GroupChatAdapter extends FirestoreAdapter<GroupChatAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if(viewType == 0){
-            return new MessageHolder(inflater.inflate(R.layout.item_group_chat_other, parent, false));
+            return new OtherMessageHolder(inflater.inflate(R.layout.item_group_chat_other, parent, false));
         }
         if(viewType == 1){
             return new MessageHolder(inflater.inflate(R.layout.item_group_chat_me, parent, false));
@@ -99,8 +99,36 @@ public class GroupChatAdapter extends FirestoreAdapter<GroupChatAdapter.ViewHold
 
     }
 
+    class OtherMessageHolder extends ViewHolder{
+        private TextView txtText;
+        private TextView txtName;
+
+        public View itemView;
+        public OtherMessageHolder(final View itemView){
+            super(itemView);
+            this.itemView = itemView;
+            txtText = itemView.findViewById(R.id.txtText);
+            txtName = itemView.findViewById(R.id.txtName);
+        }
+        @Override
+        public void bind(final DocumentSnapshot snapshot) {
+
+            rootDb.collection(DBMeta.COLLECTION_USER)
+                    .document(snapshot.getString(DBMeta.DOCUMENT_MESSAGES_MEMBER))
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            txtText.setText(snapshot.getString(DBMeta.DOCUMENT_MESSAGES_TEXT));
+                            txtName.setText(documentSnapshot.getString(DBMeta.DOCUMENT_USER_NAME));
+                        }
+                    });
+        }
+    }
+
     class MessageHolder extends ViewHolder{
         private TextView txtText;
+
         public View itemView;
         public MessageHolder(final View itemView){
             super(itemView);

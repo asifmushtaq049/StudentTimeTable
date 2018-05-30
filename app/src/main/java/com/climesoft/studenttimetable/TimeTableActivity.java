@@ -8,24 +8,36 @@ import android.widget.LinearLayout;
 import com.climesoft.studenttimetable.meta.DBMeta;
 import com.climesoft.studenttimetable.meta.KeyMeta;
 import com.climesoft.studenttimetable.util.ActivityUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TimeTableActivity extends BaseCompatActivity {
-
+    private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.activity_time_table, null);
         frameLayout.addView(linearLayout);
-        updateUserData();
+        if(getIntent() != null){
+            if(getIntent().hasExtra(KeyMeta.USER_NAME)){
+                name = getIntent().getStringExtra(KeyMeta.USER_NAME);
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+                user.updateProfile(profileUpdates);
+                updateUserData();
+            }
+        }
     }
 
     private void updateUserData() {
         final Map<String, String> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_USER_EMAIL, user.getEmail());
         data.put(DBMeta.DOCUMENT_USER_UID, user.getUid());
+        data.put(DBMeta.DOCUMENT_USER_NAME, name);
         db.set(data);
 //        ActivityUtil.showMessage(this, user.getDisplayName());
     }

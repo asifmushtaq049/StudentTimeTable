@@ -110,7 +110,7 @@ public class AssignmentAddActivity extends BaseBackActivity {
                 });
     }
 
-    private void addNewAssignment(String topic, String date, String time,
+    private void addNewAssignment(String topic, final String date, final String time,
                                   DocumentReference subRef, final View view) {
         view.setEnabled(false);
         final Map<String, Object> data = new HashMap<>();
@@ -125,12 +125,13 @@ public class AssignmentAddActivity extends BaseBackActivity {
                     public void onSuccess(DocumentReference documentReference) {
                         ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Added!");
                         view.setEnabled(true);
+                        createNotification(date, time, documentReference.getId().hashCode());
                         AssignmentAddActivity.this.finish();
                     }
                 });
     }
 
-    private void updateAssignment(String topic, String date, String time,
+    private void updateAssignment(String topic, final String date, final String time,
                                   DocumentReference subRef, final View view) {
         view.setEnabled(false);
         final Map<String, Object> data = new HashMap<>();
@@ -145,9 +146,31 @@ public class AssignmentAddActivity extends BaseBackActivity {
                     public void onSuccess(Void aVoid) {
                         ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Updated!");
                         view.setEnabled(true);
+                        createNotification(date, time, assignment.getId().hashCode());
                         AssignmentAddActivity.this.finish();
                     }
                 });
+    }
+
+    private void createNotification(String date, String time, int hashCode) {
+        String[] completeDate = date.split("-");
+        String[] completeTime = time.split(":");
+
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.MONTH,Integer.parseInt(completeDate[1]) -1);
+        cal.set(Calendar.YEAR,Integer.parseInt(completeDate[2]));
+        cal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(completeDate[0]));
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(completeTime[0]));
+        cal.set(Calendar.MINUTE,Integer.parseInt(completeTime[1]));
+        cal.set(Calendar.SECOND,0);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(KeyMeta.TYPE, KeyMeta.ASSIGNMENT);
+        bundle.putInt(KeyMeta.HASH_CODE, hashCode);
+        bundle.putString(KeyMeta.QUIZ_ASS_TOPIC, txtInputTopic.getEditText().getText().toString());
+        bundle.putString(KeyMeta.QUIZ_ASS_SUBJECT, ((Subject)spinnerSubjects.getSelectedItem()).getName() + "-" + ((Subject)spinnerSubjects.getSelectedItem()).getCode());
+        ActivityUtil.setAlarm(this, cal, bundle, hashCode);
     }
 
     public void pickDate(View view){
