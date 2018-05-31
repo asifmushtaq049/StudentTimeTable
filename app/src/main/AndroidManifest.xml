@@ -3,8 +3,7 @@
     package="com.climesoft.studenttimetable">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -65,7 +64,11 @@
         <activity
             android:name=".SettingActivity"
             android:label="Setting" />
-        <receiver android:name=".broadcast.NotificationReceiver"/>
+
+        <receiver android:name=".broadcast.NotificationReceiver" />
+
+        <activity android:name=".HelpFeedBack" />
+        <activity android:name=".AboutUs"></activity>
     </application>
 
 </manifest>
