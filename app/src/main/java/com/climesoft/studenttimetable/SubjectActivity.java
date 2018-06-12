@@ -1,6 +1,7 @@
 package com.climesoft.studenttimetable;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputLayout;
@@ -37,6 +38,7 @@ public class SubjectActivity extends BaseCompatActivity{
         mAdapter = new SubjectsAdapter(query);
         subjects.setAdapter(mAdapter);
         subjects.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
