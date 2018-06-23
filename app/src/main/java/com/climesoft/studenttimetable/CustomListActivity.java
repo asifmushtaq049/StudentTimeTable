@@ -7,35 +7,37 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
-import com.climesoft.studenttimetable.adapters.GroupAdapter;
+import com.climesoft.studenttimetable.adapters.CustomListAdapter;
+import com.climesoft.studenttimetable.adapters.QuizAdapter;
 import com.climesoft.studenttimetable.meta.DBMeta;
-import com.climesoft.studenttimetable.model.Group;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-
-public class GroupActivity extends BaseCompatActivity {
+public class CustomListActivity extends BaseCompatActivity {
 
     private RecyclerView recyclerView;
-    private GroupAdapter mAdapter;
-    private Group group;
+    private CustomListAdapter mAdapter;
     private Query query;
-    private ArrayList<Group> groups = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CoordinatorLayout coordinatorLayout =
                 (CoordinatorLayout) LayoutInflater.from(this)
-                        .inflate(R.layout.activity_group, frameLayout, false);
+                        .inflate(R.layout.activity_custom_list, frameLayout, false);
         frameLayout.addView(coordinatorLayout);
+
+        floatingButtonAction(CustomListAddActivity.class);
+
+
         recyclerView = findViewById(R.id.recyclerView);
-        query = rootdb.collection(DBMeta.COLLECTION_GROUP).whereEqualTo(DBMeta.DOCUMENT_GROUP_MEMBERS+"."+user.getUid(), true);
-        mAdapter = new GroupAdapter(query);
+        query = db.collection(DBMeta.COLLECTION_CUSTOM)
+                .orderBy(DBMeta.DOCUMENT_CUSTOM_DATE)
+                .orderBy(DBMeta.DOCUMENT_CUSTOM_TIME);
+
+        mAdapter = new CustomListAdapter(query);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        floatingButtonAction(GroupAddActivity.class);
     }
-
     @Override
     public void onStart() {
         super.onStart();

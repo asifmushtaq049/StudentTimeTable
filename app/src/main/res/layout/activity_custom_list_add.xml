@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AssignmentAddActivity">
+    tools:context=".CustomListAddActivity">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/txtInputTopic"
@@ -23,27 +23,6 @@
             android:hint="Topic" />
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/txtSubjec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Subject"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtInputTopic" />
-
-    <Spinner
-        android:id="@+id/spinnerSubjects"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSubjec" />
-
     <EditText
         android:id="@+id/editTextDate"
         android:layout_width="0dp"
@@ -56,7 +35,7 @@
         android:enabled="false"
         app:layout_constraintEnd_toStartOf="@+id/btnDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerSubjects" />
+        app:layout_constraintTop_toBottomOf="@+id/txtInputTopic" />
 
     <Button
         android:id="@+id/btnDate"
@@ -68,7 +47,7 @@
         android:background="@color/colorAccent"
         android:onClick="pickDate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerSubjects" />
+        app:layout_constraintTop_toBottomOf="@+id/txtInputTopic" />
 
     <EditText
         android:id="@+id/editTextTime"
@@ -91,8 +70,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="PICK TIME"
-        android:onClick="pickTime"
         android:background="@color/colorAccent"
+        android:onClick="pickTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
 
@@ -103,9 +82,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="ADD ASSIGNMENT"
+        android:text="ADD QUIZ"
         android:background="@color/colorAccent"
-        android:onClick="addAssignment"
+        android:onClick="addCustomList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTime" />

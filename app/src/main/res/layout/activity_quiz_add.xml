@@ -65,6 +65,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="PICK DATE"
+        android:background="@color/colorAccent"
         android:onClick="pickDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerSubjects" />
@@ -76,6 +77,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
         android:ems="10"
         android:inputType="time"
         android:enabled="false"
@@ -90,6 +92,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="PICK TIME"
+        android:background="@color/colorAccent"
         android:onClick="pickTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
@@ -102,6 +105,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="ADD QUIZ"
+        android:background="@color/colorAccent"
         android:onClick="addQuiz"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

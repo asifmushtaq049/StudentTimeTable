@@ -50,6 +50,19 @@ public class NotificationReceiver extends BroadcastReceiver{
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(notificationId, mBuilder.build());
         }
+        if(type.equals(KeyMeta.CUSTOM)){
+            String topic = intent.getStringExtra(KeyMeta.CUSTOM_TOPIC);
+            int notificationId = intent.getIntExtra(KeyMeta.HASH_CODE, 0);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(type)
+                    .setContentText("You have a reminder for " +topic.toUpperCase() + ".")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+            notificationManager.notify(notificationId, mBuilder.build());
+        }
 
 
     // Create the NotificationChannel, but only on API 26+ because

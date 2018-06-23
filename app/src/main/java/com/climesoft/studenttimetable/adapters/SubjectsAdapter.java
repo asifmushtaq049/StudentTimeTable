@@ -56,6 +56,7 @@ public class SubjectsAdapter extends FirestoreAdapter<SubjectsAdapter.ViewHolder
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             ActivityUtil.showMessage(holder.itemView.getContext(), "Deleted!");
+                                            setQuery(mQuery);
                                         }
                                     });
                         }

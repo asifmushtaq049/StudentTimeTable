@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -129,6 +130,11 @@ public class GroupChatActivity extends BaseBackActivity {
             case R.id.item_member_leave:
                 leaveMember();
                 return true;
+            case R.id.item_members:
+                final Bundle groupBundle = new Bundle();
+                groupBundle.putParcelable(KeyMeta.GROUP, group);
+                ActivityUtil.moveToActivity(this, MembersActivity.class, groupBundle);
+                return true;
             case R.id.item_notify:
                 final Bundle bundle = new Bundle();
                 bundle.putParcelable(KeyMeta.GROUP, group);
@@ -140,7 +146,7 @@ public class GroupChatActivity extends BaseBackActivity {
 
     private void leaveMember() {
         final Map<String, Object> data = new HashMap<>();
-        data.put(user.getUid(), false);
+        data.put(DBMeta.DOCUMENT_GROUP_MEMBERS+"."+user.getUid(), FieldValue.delete());
         rootdb.collection(DBMeta.COLLECTION_GROUP).document(group.getId())
                 .update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -170,10 +176,12 @@ public class GroupChatActivity extends BaseBackActivity {
                                         }
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             final String uid = document.getId();
-                                            final Map<String, Object> data = new HashMap<>();
-                                            data.put(uid, true);
+                                            final Map<String, Object> member = new HashMap<>();
+                                            member.put(uid, true);
+                                            Map<String, Object> members = new HashMap<>();
+                                            members.put(DBMeta.DOCUMENT_GROUP_MEMBERS, member);
                                             rootdb.collection(DBMeta.COLLECTION_GROUP).document(group.getId())
-                                                    .update(data)
+                                                    .set(members, SetOptions.merge())
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {

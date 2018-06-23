@@ -14,4 +14,6 @@ public class KeyMeta {
     public static final String HASH_CODE = "HASH_CODE";
     public static final String PREF_SETTING = "com.climesoft.timetable.setting";
     public static final String PREF_SETTING_TIME = "alert_before_time";
+    public static final String CUSTOM = "CUSTOM";
+    public static final String CUSTOM_TOPIC = "CUSTOM_TOPIC";
 }

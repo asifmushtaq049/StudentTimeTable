@@ -5,28 +5,30 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.climesoft.studenttimetable.GroupAddActivity;
-import com.climesoft.studenttimetable.GroupChatActivity;
+import com.climesoft.studenttimetable.AssignmentAddActivity;
+import com.climesoft.studenttimetable.CustomListAddActivity;
+import com.climesoft.studenttimetable.QuizAddActivity;
 import com.climesoft.studenttimetable.R;
 import com.climesoft.studenttimetable.SubjectAddActivity;
 import com.climesoft.studenttimetable.meta.DBMeta;
 import com.climesoft.studenttimetable.meta.KeyMeta;
-import com.climesoft.studenttimetable.model.Group;
+import com.climesoft.studenttimetable.model.Assignment;
+import com.climesoft.studenttimetable.model.CustomList;
+import com.climesoft.studenttimetable.model.Quiz;
 import com.climesoft.studenttimetable.model.Subject;
 import com.climesoft.studenttimetable.util.ActivityUtil;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
+public class CustomListAdapter extends FirestoreAdapter<CustomListAdapter.ViewHolder>{
 
-    public GroupAdapter(Query query) {
+    public CustomListAdapter(Query query) {
         super(query);
     }
 
@@ -34,31 +36,12 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(inflater.inflate(R.layout.item_activity_group, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.item_custom_list, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.bind(getSnapshot(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final DocumentSnapshot snapshot = getSnapshot(holder.getAdapterPosition());
-                final Group group = snapshot.toObject(Group.class);
-                if(group != null){
-                    group.setId(snapshot.getId());
-                    final Bundle bundle = new Bundle();
-                    bundle.putParcelable(KeyMeta.GROUP, group);
-                    ActivityUtil.moveToActivity(holder.itemView.getContext(), GroupChatActivity.class, bundle);
-                }
-            }
-        });
-        if(user.getUid().equals(getSnapshot(position).getString(DBMeta.DOCUMENT_GROUP_ADMIN))){
-            addLongListener(holder, position);
-        }
-    }
-
-    private void addLongListener(final ViewHolder holder, int position){
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -72,7 +55,7 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
                     public void onClick(DialogInterface dialog, int item) {
                         if(item == 1){
                             DocumentSnapshot snapshot = getSnapshot(holder.getAdapterPosition());
-                            rootDb.collection(DBMeta.COLLECTION_GROUP).document(snapshot.getId())
+                            db.collection(DBMeta.COLLECTION_CUSTOM).document(snapshot.getId())
                                     .delete()
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -84,12 +67,12 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
                         }
                         else if(item == 0){
                             DocumentSnapshot snapshot = getSnapshot(holder.getAdapterPosition());
-                            final Group group = snapshot.toObject(Group.class);
-                            if(group != null){
-                                group.setId(snapshot.getId());
+                            final CustomList custom = snapshot.toObject(CustomList.class);
+                            if(custom != null){
+                                custom.setId(snapshot.getId());
                                 Bundle bundle = new Bundle();
-                                bundle.putParcelable(KeyMeta.GROUP, group);
-                                ActivityUtil.moveToActivity(holder.itemView.getContext(), GroupAddActivity.class, bundle);
+                                bundle.putParcelable(KeyMeta.CUSTOM, custom);
+                                ActivityUtil.moveToActivity(holder.itemView.getContext(), CustomListAddActivity.class, bundle);
                             }
                         }
                     }
@@ -99,20 +82,24 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
             }
         });
     }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtGroupName;
+        private TextView txtTopic;
+        private TextView txtDeadline;
         public View itemView;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             this.itemView = itemView;
-            txtGroupName = itemView.findViewById(R.id.txtGroupName);
+            txtTopic = itemView.findViewById(R.id.act_quiz_ass_topic);
+            txtDeadline = itemView.findViewById(R.id.act_quiz_ass_deadline);
         }
 
         public void bind(final DocumentSnapshot snapshot) {
-            final Group group = snapshot.toObject(Group.class);
-            if(group != null){
-                txtGroupName.setText(group.getName());
+            final CustomList custom = snapshot.toObject(CustomList.class);
+            if(custom != null){
+                txtTopic.setText(custom.getTopic());
+                txtDeadline.setText(custom.getDate() + " " + custom.getTime());
             }
         }
     }

@@ -65,10 +65,23 @@
             android:name=".SettingActivity"
             android:label="Setting" />
 
+        <activity
+            android:name=".CustomListActivity"
+            android:label="Custom List" />
+
+        <activity
+            android:name=".CustomListAddActivity"
+            android:label="Add Custom List" />
+
+        <activity
+            android:name=".MembersActivity"
+            android:label="Members" />
+
         <receiver android:name=".broadcast.NotificationReceiver" />
 
         <activity android:name=".HelpFeedBack" />
-        <activity android:name=".AboutUs"></activity>
+        <activity android:name=".AboutUs" />
+        <activity android:name=".PasswordResetActivity" />
     </application>
 
 </manifest>

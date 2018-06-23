@@ -8,6 +8,10 @@
         android:icon="@drawable/ic_group_member_add"
         app:showAsAction="always" />
     <item
+        android:id="@+id/item_members"
+        android:title="Members"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/item_member_leave"
         android:title="Leave Group"
         app:showAsAction="never"/>

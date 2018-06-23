@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         view.setEnabled(false);
-        mAuth.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword(email.trim(), password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -45,8 +45,10 @@ public class LoginActivity extends BaseActivity {
                             ActivityUtil.moveToActivity(LoginActivity.this, TimeTableActivity.class);
                             LoginActivity.this.finish();
                         } else {
-                            ActivityUtil.showMessage(LoginActivity.this, "Something went wrong!");
+//                            ActivityUtil.showMessage(LoginActivity.this, );
+                            Log.d("LoginActiity", "", task.getException());
                         }
+
                         view.setEnabled(true);
                     }
                 });
@@ -54,6 +56,11 @@ public class LoginActivity extends BaseActivity {
 
     public void registerActivity(View view) {
         ActivityUtil.moveToActivity(this, RegistrationActivity.class);
+        this.finish();
+    }
+
+    public void forget(View view) {
+        ActivityUtil.moveToActivity(this, PasswordResetActivity.class);
         this.finish();
     }
 }

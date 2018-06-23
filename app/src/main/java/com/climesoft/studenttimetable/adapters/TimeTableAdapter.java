@@ -59,6 +59,7 @@ public class TimeTableAdapter extends FirestoreAdapter<TimeTableAdapter.ViewHold
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             ActivityUtil.showMessage(holder.itemView.getContext(), "Deleted!");
+                                            setQuery(mQuery);
                                         }
                                     });
                         }

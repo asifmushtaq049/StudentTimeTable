@@ -31,7 +31,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     private static final String TAG = "FirestoreAdapter";
 
-    private Query mQuery;
+    protected Query mQuery;
     private ListenerRegistration mRegistration;
     protected FirebaseFirestore rootDb = FirebaseFirestore.getInstance();
     protected FirebaseAuth mAuth;

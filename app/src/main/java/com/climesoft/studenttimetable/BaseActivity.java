@@ -43,6 +43,7 @@ abstract public class BaseActivity extends AppCompatActivity {
         if(mAuth!=null){
             mAuth.signOut();
             ActivityUtil.moveToActivity(this, LoginActivity.class);
+            this.finish();
         }
     }
     private boolean checkPlayServices() {

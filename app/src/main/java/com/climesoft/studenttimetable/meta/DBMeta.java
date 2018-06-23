@@ -43,4 +43,9 @@ public class DBMeta {
     public static final String DOCUMENT_MESSAGES_DATE_TIME = "datetime";
     public static final String DOCUMENT_MESSAGES_TITLE = "title";
     public static final String DOCUMENT_MESSAGES_SUBJECT = "subject";
+
+    public static final String COLLECTION_CUSTOM = "custom";
+    public static final String DOCUMENT_CUSTOM_TOPIC = "topic";
+    public static final String DOCUMENT_CUSTOM_DATE = "date";
+    public static final String DOCUMENT_CUSTOM_TIME = "time";
 }
