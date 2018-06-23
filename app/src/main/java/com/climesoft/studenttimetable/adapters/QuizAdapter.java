@@ -99,16 +99,18 @@ public class QuizAdapter extends FirestoreAdapter<QuizAdapter.ViewHolder>{
         public void bind(final DocumentSnapshot snapshot) {
             final Quiz quiz = snapshot.toObject(Quiz.class);
             if(quiz != null){
-                quiz.setSubjectId(snapshot.getDocumentReference(DBMeta.DOCUMENT_QUIZ_SUBJECT).getId());
-                db.collection(DBMeta.COLLECTION_SUBJECT).document(quiz.getSubjectId()).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                txtTopic.setText(quiz.getTopic());
-                                txtSubject.setText(documentSnapshot.getString(DBMeta.DOCUMENT_SUBJECT_NAME).toUpperCase());
-                                txtDeadline.setText(quiz.getDate() + " " + quiz.getTime());
-                            }
-                        });
+                if(snapshot.getDocumentReference(DBMeta.DOCUMENT_QUIZ_SUBJECT)!=null){
+                    quiz.setSubjectId(snapshot.getDocumentReference(DBMeta.DOCUMENT_QUIZ_SUBJECT).getId());
+                    db.collection(DBMeta.COLLECTION_SUBJECT).document(quiz.getSubjectId()).get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    txtTopic.setText(quiz.getTopic());
+                                    txtSubject.setText(documentSnapshot.getString(DBMeta.DOCUMENT_SUBJECT_NAME).toUpperCase());
+                                    txtDeadline.setText(quiz.getDate() + " " + quiz.getTime());
+                                }
+                            });
+                }
             }
         }
     }

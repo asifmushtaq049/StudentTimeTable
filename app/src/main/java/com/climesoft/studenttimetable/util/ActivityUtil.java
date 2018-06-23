@@ -63,8 +63,21 @@ public class ActivityUtil {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent _myIntent = new Intent(context, NotificationReceiver.class);
         _myIntent.putExtras(bundle);
-        calendar.add(Calendar.HOUR_OF_DAY, -Integer.parseInt(timeBefore(context)[0]));
-        calendar.add(Calendar.MINUTE, -Integer.parseInt(timeBefore(context)[1]));
+
+        if(KeyMeta.CUSTOM.equals(bundle.getString(KeyMeta.TYPE))){
+            calendar.add(Calendar.HOUR_OF_DAY, -Integer.parseInt(customBefore(context)[0]));
+            calendar.add(Calendar.MINUTE, -Integer.parseInt(customBefore(context)[1]));
+        }
+        if(KeyMeta.ASSIGNMENT.equals(bundle.getString(KeyMeta.TYPE))){
+            calendar.add(Calendar.HOUR_OF_DAY, -Integer.parseInt(assignmentBefore(context)[0]));
+            calendar.add(Calendar.MINUTE, -Integer.parseInt(assignmentBefore(context)[1]));
+        }
+        if(KeyMeta.QUIZ.equals(bundle.getString(KeyMeta.TYPE))){
+            calendar.add(Calendar.HOUR_OF_DAY, -Integer.parseInt(quizBefore(context)[0]));
+            calendar.add(Calendar.MINUTE, -Integer.parseInt(quizBefore(context)[1]));
+        }
+
+
         PendingIntent _myPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), hashCode, _myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),_myPendingIntent);
 
@@ -84,7 +97,28 @@ public class ActivityUtil {
     public static String[] timeBefore(Context context){
         SharedPreferences prefs;
         prefs = context.getApplicationContext().getSharedPreferences(KeyMeta.PREF_SETTING, Context.MODE_PRIVATE);
-        String time = prefs.getString(KeyMeta.PREF_SETTING_TIME, "0:15");
+        String time = prefs.getString(KeyMeta.PREF_SETTING_TIMETABLE, "0:15");
+        String[] comTime = time.split(":");
+        return comTime;
+    }
+    public static String[] quizBefore(Context context){
+        SharedPreferences prefs;
+        prefs = context.getApplicationContext().getSharedPreferences(KeyMeta.PREF_SETTING, Context.MODE_PRIVATE);
+        String time = prefs.getString(KeyMeta.PREF_SETTING_QUIZ, "24:00");
+        String[] comTime = time.split(":");
+        return comTime;
+    }
+    public static String[] assignmentBefore(Context context){
+        SharedPreferences prefs;
+        prefs = context.getApplicationContext().getSharedPreferences(KeyMeta.PREF_SETTING, Context.MODE_PRIVATE);
+        String time = prefs.getString(KeyMeta.PREF_SETTING_ASSIGNMENT, "24:00");
+        String[] comTime = time.split(":");
+        return comTime;
+    }
+    public static String[] customBefore(Context context){
+        SharedPreferences prefs;
+        prefs = context.getApplicationContext().getSharedPreferences(KeyMeta.PREF_SETTING, Context.MODE_PRIVATE);
+        String time = prefs.getString(KeyMeta.PREF_SETTING_CUSTOM, "24:00");
         String[] comTime = time.split(":");
         return comTime;
     }

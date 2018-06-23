@@ -98,12 +98,10 @@ public class SubjectAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_SUBJECT_NAME, subjectName);
         data.put(DBMeta.DOCUMENT_SUBJECT_CODE, subjectCode);
         Task<DocumentReference> doc = db.collection(DBMeta.COLLECTION_SUBJECT).add(data);
-        if(doc.isComplete()){
-            DocumentReference result = doc.getResult();
-            ActivityUtil.showMessage(SubjectAddActivity.this, "Subject Added!");
-            view.setEnabled(true);
-            SubjectAddActivity.this.finish();
-        }
+
+        ActivityUtil.showMessage(SubjectAddActivity.this, "Subject Added!");
+        view.setEnabled(true);
+        SubjectAddActivity.this.finish();
 
 
 //                .onSuccessTask(new SuccessContinuation<DocumentReference, Object>() {
