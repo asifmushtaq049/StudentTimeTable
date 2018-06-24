@@ -41,17 +41,20 @@ public class LoginActivity extends BaseActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            ActivityUtil.moveToActivity(LoginActivity.this, TimeTableActivity.class);
-                            LoginActivity.this.finish();
-                        } else {
-//                            ActivityUtil.showMessage(LoginActivity.this, );
-                            Log.d("LoginActiity", "", task.getException());
-                        }
-
-                        view.setEnabled(true);
+                        loginToServer(task, view);
                     }
                 });
+    }
+
+    private void loginToServer(Task<AuthResult> task, View view) {
+        if (task.isSuccessful()) {
+            ActivityUtil.moveToActivity(LoginActivity.this, TimeTableActivity.class);
+            LoginActivity.this.finish();
+        } else {
+            ActivityUtil.showMessage(LoginActivity.this, "Login Failed!");
+            Log.d("LoginActivity", "", task.getException());
+        }
+        view.setEnabled(true);
     }
 
     public void registerActivity(View view) {
@@ -62,5 +65,16 @@ public class LoginActivity extends BaseActivity {
     public void forget(View view) {
         ActivityUtil.moveToActivity(this, PasswordResetActivity.class);
         this.finish();
+    }
+
+    public void questLogin(final View view) {
+        view.setEnabled(false);
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        loginToServer(task, view);
+                    }
+                });
     }
 }

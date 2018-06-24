@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,7 +24,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -97,11 +102,22 @@ public class SubjectAddActivity extends BaseBackActivity {
         final Map<String, String> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_SUBJECT_NAME, subjectName);
         data.put(DBMeta.DOCUMENT_SUBJECT_CODE, subjectCode);
-        Task<DocumentReference> doc = db.collection(DBMeta.COLLECTION_SUBJECT).add(data);
-
+        DocumentReference doc = db.collection(DBMeta.COLLECTION_SUBJECT).document();
+        doc.set(data);
         ActivityUtil.showMessage(SubjectAddActivity.this, "Subject Added!");
         view.setEnabled(true);
         SubjectAddActivity.this.finish();
+
+//        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot,
+//                                @javax.annotation.Nullable FirebaseFirestoreException e) {
+//
+//            }
+//        });
+
+//        ActivityUtil.showMessage(SubjectAddActivity.this, "Subject Added!");
+
 
 
 //                .onSuccessTask(new SuccessContinuation<DocumentReference, Object>() {
@@ -136,15 +152,10 @@ public class SubjectAddActivity extends BaseBackActivity {
         final Map<String, String> data = new HashMap<>();
         data.put(DBMeta.DOCUMENT_SUBJECT_NAME, subjectName);
         data.put(DBMeta.DOCUMENT_SUBJECT_CODE, subjectCode);
-        db.collection(DBMeta.COLLECTION_SUBJECT).document(subject.getId())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        ActivityUtil.showMessage(SubjectAddActivity.this, "Subject Updated!");
-                        view.setEnabled(true);
-                        SubjectAddActivity.this.finish();
-                    }
-                });
+        DocumentReference doc = db.collection(DBMeta.COLLECTION_SUBJECT).document(subject.getId());
+        doc.set(data);
+        ActivityUtil.showMessage(SubjectAddActivity.this, "Subject Updated!");
+        view.setEnabled(true);
+        SubjectAddActivity.this.finish();
     }
 }

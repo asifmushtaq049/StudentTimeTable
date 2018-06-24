@@ -118,17 +118,21 @@ public class AssignmentAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_ASSIGNMENT_DATE, date);
         data.put(DBMeta.DOCUMENT_ASSIGNMENT_TIME, time);
         data.put(DBMeta.DOCUMENT_ASSIGNMENT_SUBJECT, subRef);
-        db.collection(DBMeta.COLLECTION_ASSIGNMENT)
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Added!");
-                        view.setEnabled(true);
-                        createNotification(date, time, documentReference.getId().hashCode());
-                        AssignmentAddActivity.this.finish();
-                    }
-                });
+        DocumentReference doc = db.collection(DBMeta.COLLECTION_ASSIGNMENT).document();
+        doc.set(data);
+        ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Added!");
+        view.setEnabled(true);
+        createNotification(date, time, doc.getId().hashCode());
+        AssignmentAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Added!");
+//                        view.setEnabled(true);
+//                        createNotification(date, time, documentReference.getId().hashCode());
+//                        AssignmentAddActivity.this.finish();
+//                    }
+//                });
     }
 
     private void updateAssignment(String topic, final String date, final String time,
@@ -139,17 +143,20 @@ public class AssignmentAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_ASSIGNMENT_DATE, date);
         data.put(DBMeta.DOCUMENT_ASSIGNMENT_TIME, time);
         data.put(DBMeta.DOCUMENT_ASSIGNMENT_SUBJECT, subRef);
-        db.collection(DBMeta.COLLECTION_ASSIGNMENT).document(assignment.getId())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Updated!");
-                        view.setEnabled(true);
-                        createNotification(date, time, assignment.getId().hashCode());
-                        AssignmentAddActivity.this.finish();
-                    }
-                });
+        db.collection(DBMeta.COLLECTION_ASSIGNMENT).document(assignment.getId()).set(data);
+        ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Updated!");
+        view.setEnabled(true);
+        createNotification(date, time, assignment.getId().hashCode());
+        AssignmentAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        ActivityUtil.showMessage(AssignmentAddActivity.this, "Assignment Updated!");
+//                        view.setEnabled(true);
+//                        createNotification(date, time, assignment.getId().hashCode());
+//                        AssignmentAddActivity.this.finish();
+//                    }
+//                });
     }
 
     private void createNotification(String date, String time, int hashCode) {

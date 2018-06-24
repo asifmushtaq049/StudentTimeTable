@@ -97,7 +97,7 @@ public class TimeTableAdapter extends FirestoreAdapter<TimeTableAdapter.ViewHold
 
         public void bind(final DocumentSnapshot snapshot) {
             final TimeTable timeTable = snapshot.toObject(TimeTable.class);
-            if(timeTable != null){
+            if(timeTable != null && snapshot.getDocumentReference(DBMeta.DOCUMENT_TIMETABLE_SUBJECT) != null){
                 timeTable.setSubjectId(snapshot.getDocumentReference(DBMeta.DOCUMENT_TIMETABLE_SUBJECT).getId());
                 db.collection(DBMeta.COLLECTION_SUBJECT)
                     .document(timeTable.getSubjectId())

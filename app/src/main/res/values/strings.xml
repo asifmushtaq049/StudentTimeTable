@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudentTimeTable</string>
+    <string name="app_name">Student Personal Assistant</string>
     <string name="title_activity_subject">SubjectActivity</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>

@@ -130,17 +130,21 @@ public class CustomListAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_CUSTOM_TOPIC, topic);
         data.put(DBMeta.DOCUMENT_CUSTOM_DATE, date);
         data.put(DBMeta.DOCUMENT_CUSTOM_TIME, time);
-        db.collection(DBMeta.COLLECTION_CUSTOM)
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        ActivityUtil.showMessage(CustomListAddActivity.this, "List Added!");
-                        view.setEnabled(true);
-                        createNotification(date, time, documentReference.getId().hashCode());
-                        CustomListAddActivity.this.finish();
-                    }
-                });
+        DocumentReference doc = db.collection(DBMeta.COLLECTION_CUSTOM).document();
+        doc.set(data);
+        ActivityUtil.showMessage(CustomListAddActivity.this, "List Added!");
+        view.setEnabled(true);
+        createNotification(date, time, doc.getId().hashCode());
+        CustomListAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        ActivityUtil.showMessage(CustomListAddActivity.this, "List Added!");
+//                        view.setEnabled(true);
+//                        createNotification(date, time, documentReference.getId().hashCode());
+//                        CustomListAddActivity.this.finish();
+//                    }
+//                });
     }
     private void createNotification(String date, String time, int hashCode) {
         String[] completeDate = date.split("-");
@@ -169,15 +173,19 @@ public class CustomListAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_CUSTOM_TIME, time);
 
         db.collection(DBMeta.COLLECTION_CUSTOM).document(custom.getId())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        ActivityUtil.showMessage(CustomListAddActivity.this, "Updated!");
-                        view.setEnabled(true);
-                        createNotification(date, time, custom.getId().hashCode());
-                        CustomListAddActivity.this.finish();
-                    }
-                });
+                .set(data);
+        ActivityUtil.showMessage(CustomListAddActivity.this, "Updated!");
+        view.setEnabled(true);
+        createNotification(date, time, custom.getId().hashCode());
+        CustomListAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        ActivityUtil.showMessage(CustomListAddActivity.this, "Updated!");
+//                        view.setEnabled(true);
+//                        createNotification(date, time, custom.getId().hashCode());
+//                        CustomListAddActivity.this.finish();
+//                    }
+//                });
     }
 }

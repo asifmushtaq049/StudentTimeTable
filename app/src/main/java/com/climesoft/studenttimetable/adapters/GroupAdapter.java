@@ -62,7 +62,7 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final CharSequence[] items = {"Edit","Delete"};
+                final CharSequence[] items = {"Delete"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
 
@@ -70,7 +70,7 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        if(item == 1){
+                        if(item == 0){
                             DocumentSnapshot snapshot = getSnapshot(holder.getAdapterPosition());
                             rootDb.collection(DBMeta.COLLECTION_GROUP).document(snapshot.getId())
                                     .delete()
@@ -82,16 +82,16 @@ public class GroupAdapter extends FirestoreAdapter<GroupAdapter.ViewHolder>{
                                         }
                                     });
                         }
-                        else if(item == 0){
-                            DocumentSnapshot snapshot = getSnapshot(holder.getAdapterPosition());
-                            final Group group = snapshot.toObject(Group.class);
-                            if(group != null){
-                                group.setId(snapshot.getId());
-                                Bundle bundle = new Bundle();
-                                bundle.putParcelable(KeyMeta.GROUP, group);
-                                ActivityUtil.moveToActivity(holder.itemView.getContext(), GroupAddActivity.class, bundle);
-                            }
-                        }
+//                        else if(item == 0){
+//                            DocumentSnapshot snapshot = getSnapshot(holder.getAdapterPosition());
+//                            final Group group = snapshot.toObject(Group.class);
+//                            if(group != null){
+//                                group.setId(snapshot.getId());
+//                                Bundle bundle = new Bundle();
+//                                bundle.putParcelable(KeyMeta.GROUP, group);
+//                                ActivityUtil.moveToActivity(holder.itemView.getContext(), GroupAddActivity.class, bundle);
+//                            }
+//                        }
                     }
                 });
                 builder.show();

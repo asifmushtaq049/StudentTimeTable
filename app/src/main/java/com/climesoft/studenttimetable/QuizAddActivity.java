@@ -123,17 +123,21 @@ public class QuizAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_QUIZ_DATE, date);
         data.put(DBMeta.DOCUMENT_QUIZ_TIME, time);
         data.put(DBMeta.DOCUMENT_QUIZ_SUBJECT, subRef);
-        db.collection(DBMeta.COLLECTION_QUIZ)
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Added!");
-                        view.setEnabled(true);
-                        createNotification(date, time, documentReference.getId().hashCode());
-                        QuizAddActivity.this.finish();
-                    }
-                });
+        DocumentReference doc = db.collection(DBMeta.COLLECTION_QUIZ).document();
+        doc.set(data);
+        ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Added!");
+        view.setEnabled(true);
+        createNotification(date, time, doc.getId().hashCode());
+        QuizAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Added!");
+//                        view.setEnabled(true);
+//                        createNotification(date, time, documentReference.getId().hashCode());
+//                        QuizAddActivity.this.finish();
+//                    }
+//                });
     }
 
     private void createNotification(String date, String time, int hashCode) {
@@ -167,16 +171,20 @@ public class QuizAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_QUIZ_SUBJECT, subRef);
 
         db.collection(DBMeta.COLLECTION_QUIZ).document(quiz.getId())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Updated!");
-                        view.setEnabled(true);
-                        createNotification(date, time, quiz.getId().hashCode());
-                        QuizAddActivity.this.finish();
-                    }
-                });
+                .set(data);
+        ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Updated!");
+        view.setEnabled(true);
+        createNotification(date, time, quiz.getId().hashCode());
+        QuizAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        ActivityUtil.showMessage(QuizAddActivity.this, "Quiz Updated!");
+//                        view.setEnabled(true);
+//                        createNotification(date, time, quiz.getId().hashCode());
+//                        QuizAddActivity.this.finish();
+//                    }
+//                });
     }
 
     public void pickDate(View view){

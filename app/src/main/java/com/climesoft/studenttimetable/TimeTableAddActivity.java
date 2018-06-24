@@ -137,16 +137,19 @@ public class TimeTableAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_TIMETABLE_DAY, day);
         data.put(DBMeta.DOCUMENT_TIMETABLE_SUBJECT, subRef);
         data.put(DBMeta.DOCUMENT_TIMETABLE_TIME, time);
-        db.collection(DBMeta.COLLECTION_TIMETABLE)
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Added!");
-                        createNotification(time, documentReference.getId().hashCode());
-                        TimeTableAddActivity.this.finish();
-                    }
-                });
+        DocumentReference doc = db.collection(DBMeta.COLLECTION_TIMETABLE).document();
+        doc.set(data);
+        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Added!");
+        createNotification(time, doc.getId().hashCode());
+        TimeTableAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Added!");
+//                        createNotification(time, documentReference.getId().hashCode());
+//                        TimeTableAddActivity.this.finish();
+//                    }
+//                });
     }
 
     private void updateTimeTable(DocumentReference subRef, final String time, View view){
@@ -157,15 +160,18 @@ public class TimeTableAddActivity extends BaseBackActivity {
         data.put(DBMeta.DOCUMENT_TIMETABLE_TIME, time);
         db.collection(DBMeta.COLLECTION_TIMETABLE)
                 .document(timeTable.getId())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Updated!");
-                        createNotification(time, timeTable.getId().hashCode());
-                        TimeTableAddActivity.this.finish();
-                    }
-                });
+                .set(data);
+        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Updated!");
+        createNotification(time, timeTable.getId().hashCode());
+        TimeTableAddActivity.this.finish();
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        ActivityUtil.showMessage(TimeTableAddActivity.this, "TimeTable Updated!");
+//                        createNotification(time, timeTable.getId().hashCode());
+//                        TimeTableAddActivity.this.finish();
+//                    }
+//                });
     }
 
     private void createNotification(String time, int hashCode) {

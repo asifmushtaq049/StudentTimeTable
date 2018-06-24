@@ -96,7 +96,7 @@ public class AssignmentAdapter extends FirestoreAdapter<AssignmentAdapter.ViewHo
 
         public void bind(final DocumentSnapshot snapshot) {
             final Assignment assignment = snapshot.toObject(Assignment.class);
-            if(assignment != null){
+            if(assignment != null && snapshot.getDocumentReference(DBMeta.DOCUMENT_ASSIGNMENT_SUBJECT) != null){
             assignment.setSubjectId(snapshot.getDocumentReference(DBMeta.DOCUMENT_ASSIGNMENT_SUBJECT).getId());
             db.collection(DBMeta.COLLECTION_SUBJECT).document(assignment.getSubjectId()).get()
             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

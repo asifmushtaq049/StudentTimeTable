@@ -82,7 +82,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="ADD QUIZ"
+        android:text="ADD"
         android:background="@color/colorAccent"
         android:onClick="addCustomList"
         app:layout_constraintEnd_toEndOf="parent"
