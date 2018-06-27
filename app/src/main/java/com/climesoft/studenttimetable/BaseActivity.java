@@ -24,6 +24,7 @@ abstract public class BaseActivity extends AppCompatActivity {
     protected FirebaseAuth mAuth;
     protected FirebaseUser user;
     protected DocumentReference db;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -34,10 +35,6 @@ abstract public class BaseActivity extends AppCompatActivity {
                 db = rootdb.collection(DBMeta.COLLECTION_USER).document(user.getUid());
             }
         }
-//        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-//                .setPersistenceEnabled(true)
-//                .build();
-//        db.setFirestoreSettings(settings);
     }
     protected void logout(){
         if(mAuth!=null){

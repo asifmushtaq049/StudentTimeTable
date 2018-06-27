@@ -35,7 +35,6 @@ public class DBMeta {
     public static final String DOCUMENT_MESSAGES_TIME = "time";
     public static final String DOCUMENT_MESSAGES_IMPORTANT = "important";
 
-
     public static final String DOCUMENT_USER_EMAIL = "email";
     public static final String DOCUMENT_USER_UID = "uid";
     public static final String DOCUMENT_USER_NAME = "name";

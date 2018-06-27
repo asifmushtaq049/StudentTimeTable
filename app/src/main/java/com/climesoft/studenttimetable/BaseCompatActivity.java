@@ -81,7 +81,10 @@ public abstract class BaseCompatActivity extends BaseActivity{
                 ActivityUtil.moveToActivity(BaseCompatActivity.this, QuizActivity.class);
                 return true;
             case R.id.nav_chat_group:
-                ActivityUtil.moveToActivity(BaseCompatActivity.this, GroupActivity.class);
+                if(user.isAnonymous())
+                    ActivityUtil.showMessage(this, "You can't use Chat Service as guest");
+                else
+                    ActivityUtil.moveToActivity(BaseCompatActivity.this, GroupActivity.class);
                 return true;
             case R.id.nav_setting:
                 ActivityUtil.moveToActivity(BaseCompatActivity.this, SettingActivity.class);
